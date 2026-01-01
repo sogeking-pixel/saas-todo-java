@@ -1,0 +1,67 @@
+@url = http://localhost:8000
+
+### GET WELCOME
+GET {{url}}/hello
+
+### GET GOOD BYE
+GET {{url}}/goodbye
+
+### POST to REGISTER A NEW USER
+POST {{url}}/auth/register
+Content-Type: application/json
+
+{
+  "dni": "75988888",
+  "email": "hola@gmail.com",
+  "firstName": "yerson",
+  "lastName": "Sanchez",
+  "username": "yesrxd",
+  "password": "123456789"
+}
+
+### POST to LOGIN AND GET A NEW TOKEN :/
+POST {{url}}/auth/login
+Content-Type: application/json
+
+{
+  "username": "yesrxd",
+  "password": "123456789"
+}
+
+
+> {%
+    client.global.set("accessToken", response.body.accessToken);
+    client.global.set("refreshToken", response.body.refreshToken);
+%}
+
+
+### GET A ENPOINT NEED AUTHENTICATION
+GET {{url}}/goodbye
+Authorization: Bearer {{accessToken}}
+
+### Get a new Access Token
+POST {{url}}/auth/token/refresh
+Content-Type: application/json
+
+{
+    "refreshToken" : "{{refreshToken}}"
+}
+
+
+> {%
+    client.global.set("accessToken", response.body.accessToken);
+    client.global.set("refreshToken", response.body.refreshToken)
+%}
+
+### POST TO LOGOUT
+POST {{url}}/auth/logout
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+    "refreshToken" : "{{refreshToken}}"
+}
+
+
+
+

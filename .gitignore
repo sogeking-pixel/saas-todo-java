@@ -1,0 +1,61 @@
+# --- GENERAL ---
+*.log
+*.env
+.env.*
+__pycache__/
+*.py[cod]
+*$py.class
+.DS_Store
+Thumbs.db
+
+# --- BACKEND (Django) ---
+/backend/db.sqlite3
+/backend/media/
+backend/staticfiles/
+backend/static/
+*.pot
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+.eggs/
+instance/
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+*.mo
+
+# --- FRONTEND (React) ---
+/frontend/node_modules/
+frontend/build/
+frontend/.env
+frontend/.env.local
+frontend/.env.development
+frontend/.env.test
+frontend/.env.production
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp.*
+.pnp.js
+
+# --- EDITORES ---
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# --- DOCKER ---
+/postgres-data/
+*.pid
+
+# --- OTRAS ---
+/infra/nginx.conf~
+/docs/*.tmp
+
+!.env.example
