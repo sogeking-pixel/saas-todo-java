@@ -1,0 +1,31 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: builder
+    entrypoint: ""
+    command: ./mvnw spring-boot:run
+    volumes:
+      - ./backend:/app
+      - /app/.mvn
+    ports:
+      - "8080:8080"
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    command: npm run dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    stdin_open: true
+    tty: true
+
+  gateway:
+    depends_on:
+      - frontend
+    volumes:
+      - ./nginx/nginx.dev.conf:/etc/nginx/nginx.conf
