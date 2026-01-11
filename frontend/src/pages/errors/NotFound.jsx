@@ -8,7 +8,7 @@ function NotFound() {
           Página No Encontrada
         </h1>
         <p className="text-gray-700 mb-6 text-green text-2xl">
-          Lo sentimos, la página que buscas no existe o ha sido movida :(
+          Lo sentimos, la página que buscas no existe o ha sido movida :( o no?
         </p>
       </div>
     </div>
