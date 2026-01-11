@@ -1,29 +1,47 @@
 # TodoSafe – Secure JWT Architecture
 
-TodoSafe is a reference implementation of a task management system focused on secure JWT authentication in distributed systems.  
-Rather than being a conventional ToDo application, this project explores and solves the “Stateless vs Secure” dilemma using a Hybrid JWT Invalidation Strategy.
+![Java](https://img.shields.io/badge/Java-25%2B-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4%2B-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+![Nginx](https://img.shields.io/badge/Nginx-Server-009639?style=for-the-badge&logo=nginx&logoColor=white)
+![Postgres](https://img.shields.io/badge/Postgres-DB-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-Cache-DC382D?style=for-the-badge&logo=redis&logoColor=white)
+![React](https://img.shields.io/badge/React-18%2B-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-The objective is to demonstrate how to achieve immediate token revocation, high performance, and scalability without sacrificing JWT statelessness.
+**TodoSafe** is a reference implementation of a task management system focused on secure JWT authentication in distributed systems.
+
+Beyond a conventional ToDo application, this project acts as a proof-of-concept for the "Stateless vs Secure" dilemma, implementing a **Hybrid JWT Invalidation Strategy** and a robust **Edge Layer** using NGINX.
+
+The infrastructure is fortified with a **Reverse Proxy Architecture** that provides:
+- **Unified Entry Point:** Single port exposure (80) via NGINX Gateway.
+- **Attack Surface Reduction:** Backend and Database are isolated in an internal network.
+- **Rate Limiting:** Protection against brute-force attacks on sensitive endpoints.
+- **Static Content Delivery:** High-performance serving of the React frontend.
 
 ---
 
 ## Architecture Overview
 
-The system follows a Layered Architecture with strict separation of concerns.  
-All components are orchestrated using Docker Compose, enabling consistent and reproducible environments.
+The system follows a Layered Architecture with strict separation of concerns, orchestrated via Docker Compose.
 
-**Main layers:**
+### Infrastructure Diagram
 
-- Application layer (Spring Boot)
-- Persistence layer (PostgreSQL)
-- Cache layer (Redis)
-- Client layer (React)
+![img.png](images/img.png)
+
+#### Main Layers:
+
+- Edge Layer (NGINX): Handles routing, static files, and initial security filtering.
+
+- Client Layer (React): Consumed via NGINX, operating as a SPA.
+
+- Application Layer (Spring Boot): RESTful API with stateless security.
+
+- Persistence Layer: PostgreSQL (Data) and Redis (Token Blacklist).
 
 ---
 
-## Authentication & Authorization Design
-
-### 1. Authentication Flow (Login)
+### Authentication & Authorization Design
 
 ![Login Flow](./images/login.png)
 
@@ -36,7 +54,7 @@ This approach minimizes attack surface while maintaining usability.
 
 ---
 
-### 2. Request Authorization Chain (Security Filter Chain)
+### Request Authorization Chain (Security Filter Chain)
 
 ![Authorization Flow](./images/auth-general.png)
 
@@ -55,7 +73,7 @@ A custom `OncePerRequestFilter` is integrated into the Spring Security filter ch
 
 ---
 
-### 3. Secure Logout (Hybrid Invalidation Strategy)
+### Secure Logout (Hybrid Invalidation Strategy)
 
 ![Logout Flow](./images/logout.png)
 
@@ -72,6 +90,11 @@ TodoSafe implements a hybrid invalidation strategy to guarantee immediate sessio
 
 ## Technology Stack
 
+### Infrastructure & DevOps
+- Gateway: NGINX (Reverse Proxy & Static Server)
+- Containerization: Docker & Docker Compose (Multi-stage builds)
+- Orchestration: Docker Compose (Dev/Prod overrides)
+ 
 ### Backend
 - Language: Java 25
 - Framework: Spring Boot
@@ -91,6 +114,7 @@ TodoSafe implements a hybrid invalidation strategy to guarantee immediate sessio
 
 ## Key Features
 
+- Gateway Pattern: Unified access to Frontend and API via NGINX
 - JWT authentication with access and refresh token rotation
 - High-performance token revocation using Redis blacklisting
 - Scheduled cleanup jobs for expired and revoked tokens
@@ -99,6 +123,24 @@ TodoSafe implements a hybrid invalidation strategy to guarantee immediate sessio
 - OpenAPI / Swagger documentation
 
 ---
+
+## Getting Started
+
+### Development Mode (Hot-Reload)
+
+Starts the full stack with Hot Module Replacement (HMR) for React and Spring Boot DevTools enabled. Changes in code are reflected instantly.
+
+```shell
+docker-compose --profile dev up --build
+```
+
+### Production Mode (Optimized)
+
+Simulates a real-world deployment. Builds optimized, immutable images using multi-stage builds. NGINX serves static files directly; no Node.js container is active.
+
+```shell
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build
+```
 
 ## Future Roadmap
 
